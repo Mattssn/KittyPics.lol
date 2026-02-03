@@ -72,6 +72,12 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
         }
         select {
             width: 100%;
@@ -126,7 +132,7 @@
             transition: background 0.3s;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             margin: 0 auto;
-            display: block;
+            display: none;
             max-width: 350px;
         }
         button:hover {
@@ -162,7 +168,7 @@
         <h1>🐱 Random Cat Generator 🐱</h1>
         <button class="dark-toggle" onclick="toggleDarkMode()">🌙 Dark</button>
     </div>
-    <div class="container">
+    <div class="container" onclick="getRandomCat()"
         <select id="breedSelect">
             <option value="">All Breeds</option>
         </select>
@@ -171,7 +177,6 @@
             <div class="watermark">kittypics.lol</div>
         </div>
         <p id="loading" class="loading">Loading a cute cat...</p>
-        <button onclick="getRandomCat()">Get New Cat</button>
     </div>
     <script>
         let breeds = [];
