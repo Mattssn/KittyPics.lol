@@ -125,19 +125,28 @@
             cursor: pointer;
             transition: background 0.3s;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            width: 100%;
+            margin: 0 auto;
+            display: block;
             max-width: 350px;
         }
         button:hover {
             background: #ff5252;
         }
+        /* Desktop: 700px container */
+        @media (min-width: 768px) {
+            .container {
+                width: 700px;
+            }
+        }
+        
+        /* Mobile: full width with padding */
         @media (max-width: 480px) {
             h1 {
                 font-size: 2em;
             }
             .container {
                 padding: 25px;
-                max-width: 100%;
+                width: 100%;
                 min-height: 550px;
             }
             button {
