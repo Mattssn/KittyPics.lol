@@ -126,7 +126,7 @@
             transition: background 0.3s;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             margin: 0 auto;
-            display: block;
+            display: none;
             max-width: 350px;
         }
         button:hover {
@@ -171,7 +171,7 @@
             <div class="watermark">kittypics.lol</div>
         </div>
         <p id="loading" class="loading">Loading a cute cat...</p>
-        <button onclick="getRandomCat()">Get New Cat</button>
+        <p style="text-align: center; color: var(--text-color); font-size: 0.95em; margin-top: 10px;">Refresh page for new cat</p>
     </div>
     <script>
         let breeds = [];
