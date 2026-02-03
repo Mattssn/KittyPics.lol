@@ -37,10 +37,10 @@
         }
         .header {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             margin-bottom: 20px;
-            position: relative;
             width: 100%;
             max-width: 700px;
         }
@@ -48,17 +48,20 @@
             font-size: 2.5em;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
             color: #fff;
+            margin-bottom: 15px;
         }
         .dark-toggle {
-            position: absolute;
-            right: 0;
             background: rgba(0,0,0,0.3);
             color: white;
             border: none;
-            padding: 10px 15px;
+            padding: 10px 20px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 0.9em;
+            font-size: 0.95em;
+            transition: background 0.3s;
+        }
+        .dark-toggle:hover {
+            background: rgba(0,0,0,0.5);
         }
         .container {
             background: var(--container-bg);
@@ -119,10 +122,6 @@
             .container {
                 padding: 25px;
                 max-width: 100%;
-            }
-            .dark-toggle {
-                position: static;
-                margin-top: 10px;
             }
             canvas {
                 margin: 20px 0;
