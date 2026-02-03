@@ -1,7 +1,7 @@
 const express = require('express');
 const sharp = require('sharp');
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 app.use(express.static('.')); // serve static files like index.html
 
