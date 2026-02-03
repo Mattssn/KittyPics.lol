@@ -14,13 +14,11 @@
             --bg-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
             --text-color: #333;
             --container-bg: rgba(255, 255, 255, 0.95);
-            --canvas-bg: #fff;
         }
         body.dark-mode {
             --bg-gradient: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #2d2d2d 100%);
             --text-color: #e0e0e0;
             --container-bg: rgba(30, 30, 30, 0.95);
-            --canvas-bg: #2a2a2a;
         }
         body {
             font-family: 'Arial', sans-serif;
@@ -78,17 +76,17 @@
             margin-bottom: 25px;
             border-radius: 8px;
             border: 1px solid #ddd;
-            background: var(--canvas-bg);
-            color: var(--text-color);
+            background: #fff;
+            color: #333;
         }
-        canvas {
+        img {
             width: 100%;
             height: auto;
             border-radius: 10px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.2);
             margin: 25px 0;
             display: block;
-            background: var(--canvas-bg);
+            max-width: 100%;
         }
         .loading {
             display: none;
@@ -116,15 +114,9 @@
             h1 {
                 font-size: 2em;
             }
-            .header {
-                flex-direction: column;
-            }
             .container {
                 padding: 25px;
                 max-width: 100%;
-            }
-            canvas {
-                margin: 20px 0;
             }
             button {
                 padding: 14px 35px;
@@ -142,7 +134,7 @@
         <select id="breedSelect">
             <option value="">All Breeds</option>
         </select>
-        <canvas id="catCanvas"></canvas>
+        <img id="catImage" src="" alt="Random cat" style="display:none;">
         <p id="loading" class="loading">Loading a cute cat...</p>
         <button onclick="getRandomCat()">Get New Cat</button>
     </div>
@@ -166,7 +158,7 @@
         }
 
         async function getRandomCat() {
-            const canvas = document.getElementById('catCanvas');
+            const img = document.getElementById('catImage');
             const loading = document.getElementById('loading');
             const selectedBreed = document.getElementById('breedSelect').value;
             loading.style.display = 'block';
@@ -180,91 +172,23 @@
                 if (!response.ok) throw new Error(`API error: ${response.status}`);
                 const data = await response.json();
                 if (!data || !data[0]) throw new Error('No cat data received');
-                const imageUrl = '/api/watermark?url=' + encodeURIComponent(data[0].url);
-                const img = new Image();
+                img.src = data[0].url;
                 img.onload = () => {
-                    const ctx = canvas.getContext('2d');
-                    const displayWidth = canvas.clientWidth;
-                    
-                    // Detect and crop white borders
-                    const tempCanvas = document.createElement('canvas');
-                    tempCanvas.width = img.naturalWidth;
-                    tempCanvas.height = img.naturalHeight;
-                    const tempCtx = tempCanvas.getContext('2d');
-                    tempCtx.drawImage(img, 0, 0);
-                    const imageData = tempCtx.getImageData(0, 0, img.naturalWidth, img.naturalHeight);
-                    const data = imageData.data;
-                    
-                    let topCrop = 0, bottomCrop = img.naturalHeight;
-                    const threshold = 240; // Whiteness threshold
-                    
-                    // Find top white border
-                    for (let y = 0; y < img.naturalHeight; y++) {
-                        let isWhite = true;
-                        for (let x = 0; x < img.naturalWidth; x++) {
-                            const idx = (y * img.naturalWidth + x) * 4;
-                            if (data[idx] < threshold || data[idx + 1] < threshold || data[idx + 2] < threshold) {
-                                isWhite = false;
-                                break;
-                            }
-                        }
-                        if (!isWhite) {
-                            topCrop = y;
-                            break;
-                        }
-                    }
-                    
-                    // Find bottom white border
-                    for (let y = img.naturalHeight - 1; y >= topCrop; y--) {
-                        let isWhite = true;
-                        for (let x = 0; x < img.naturalWidth; x++) {
-                            const idx = (y * img.naturalWidth + x) * 4;
-                            if (data[idx] < threshold || data[idx + 1] < threshold || data[idx + 2] < threshold) {
-                                isWhite = false;
-                                break;
-                            }
-                        }
-                        if (!isWhite) {
-                            bottomCrop = y + 1;
-                            break;
-                        }
-                    }
-                    
-                    const croppedHeight = bottomCrop - topCrop;
-                    const ratio = Math.min(displayWidth / img.naturalWidth, 400 / croppedHeight);
-                    const scaledWidth = img.naturalWidth * ratio;
-                    const scaledHeight = croppedHeight * ratio;
-                    const watermarkBarHeight = 40;
-                    
-                    canvas.width = displayWidth;
-                    canvas.height = scaledHeight + watermarkBarHeight;
-                    
-                    const x = (displayWidth - scaledWidth) / 2;
-                    const y = 0;
-                    
-                    ctx.fillStyle = '#fff';
-                    ctx.fillRect(0, 0, displayWidth, canvas.height);
-                    ctx.drawImage(img, 0, topCrop, img.naturalWidth, croppedHeight, x, y, scaledWidth, scaledHeight);
-                    
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-                    ctx.fillRect(0, scaledHeight, displayWidth, watermarkBarHeight);
-                    ctx.fillStyle = '#333';
-                    ctx.font = 'bold 14px Arial';
-                    ctx.textAlign = 'center';
-                    ctx.fillText('kittypics.lol', displayWidth / 2, scaledHeight + 26);
+                    img.style.display = 'block';
                     loading.style.display = 'none';
                 };
                 img.onerror = () => {
-                    console.error('Image load failed:', imageUrl);
+                    console.error('Image load failed:', data[0].url);
                     loading.textContent = 'Failed to load image!';
+                    img.style.display = 'none';
                 };
-                img.src = imageUrl;
             } catch (error) {
                 console.error('Error fetching cat:', error);
                 loading.textContent = 'Oops, cat escaped! ' + error.message;
                 loading.style.display = 'block';
             }
         }
+        
         loadBreeds();
         getRandomCat();
         
