@@ -53,9 +53,9 @@
             position: absolute;
             bottom: 10px;
             right: 10px;
-            background: rgba(0,0,0,0.6);
-            color: white;
-            border: 2px solid white;
+            background: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--text-color);
             padding: 12px 16px;
             border-radius: 8px;
             cursor: pointer;
@@ -66,7 +66,7 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         }
         .dark-toggle:hover {
-            background: rgba(0,0,0,0.8);
+            background: rgba(255, 255, 255, 0.1);
             transform: scale(1.1);
         }
         .container {
@@ -239,6 +239,11 @@
         
         loadBreeds();
         getRandomCat();
+        
+        // Save breed selection on change
+        document.getElementById('breedSelect').addEventListener('change', function() {
+            localStorage.setItem('selectedBreed', this.value);
+        });
         
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
