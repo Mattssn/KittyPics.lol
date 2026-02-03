@@ -142,26 +142,73 @@
                 img.onload = () => {
                     const ctx = canvas.getContext('2d');
                     const displayWidth = canvas.clientWidth;
-                    const displayHeight = 400;
+                    
+                    // Detect and crop white borders
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = img.naturalWidth;
+                    tempCanvas.height = img.naturalHeight;
+                    const tempCtx = tempCanvas.getContext('2d');
+                    tempCtx.drawImage(img, 0, 0);
+                    const imageData = tempCtx.getImageData(0, 0, img.naturalWidth, img.naturalHeight);
+                    const data = imageData.data;
+                    
+                    let topCrop = 0, bottomCrop = img.naturalHeight;
+                    const threshold = 240; // Whiteness threshold
+                    
+                    // Find top white border
+                    for (let y = 0; y < img.naturalHeight; y++) {
+                        let isWhite = true;
+                        for (let x = 0; x < img.naturalWidth; x++) {
+                            const idx = (y * img.naturalWidth + x) * 4;
+                            if (data[idx] < threshold || data[idx + 1] < threshold || data[idx + 2] < threshold) {
+                                isWhite = false;
+                                break;
+                            }
+                        }
+                        if (!isWhite) {
+                            topCrop = y;
+                            break;
+                        }
+                    }
+                    
+                    // Find bottom white border
+                    for (let y = img.naturalHeight - 1; y >= topCrop; y--) {
+                        let isWhite = true;
+                        for (let x = 0; x < img.naturalWidth; x++) {
+                            const idx = (y * img.naturalWidth + x) * 4;
+                            if (data[idx] < threshold || data[idx + 1] < threshold || data[idx + 2] < threshold) {
+                                isWhite = false;
+                                break;
+                            }
+                        }
+                        if (!isWhite) {
+                            bottomCrop = y + 1;
+                            break;
+                        }
+                    }
+                    
+                    const croppedHeight = bottomCrop - topCrop;
+                    const ratio = Math.min(displayWidth / img.naturalWidth, 400 / croppedHeight);
+                    const scaledWidth = img.naturalWidth * ratio;
+                    const scaledHeight = croppedHeight * ratio;
+                    const watermarkBarHeight = 40;
                     
                     canvas.width = displayWidth;
-                    canvas.height = displayHeight + 50;
+                    canvas.height = scaledHeight + watermarkBarHeight;
                     
-                    const ratio = Math.min(displayWidth / img.naturalWidth, displayHeight / img.naturalHeight);
-                    const scaledWidth = img.naturalWidth * ratio;
-                    const scaledHeight = img.naturalHeight * ratio;
                     const x = (displayWidth - scaledWidth) / 2;
-                    const y = (displayHeight - scaledHeight) / 2;
+                    const y = 0;
                     
                     ctx.fillStyle = '#fff';
-                    ctx.fillRect(0, 0, displayWidth, displayHeight + 50);
-                    ctx.drawImage(img, x, y, scaledWidth, scaledHeight);
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
-                    ctx.fillRect(0, displayHeight, displayWidth, 50);
-                    ctx.fillStyle = 'black';
-                    ctx.font = 'bold 16px Arial';
+                    ctx.fillRect(0, 0, displayWidth, canvas.height);
+                    ctx.drawImage(img, 0, topCrop, img.naturalWidth, croppedHeight, x, y, scaledWidth, scaledHeight);
+                    
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                    ctx.fillRect(0, scaledHeight, displayWidth, watermarkBarHeight);
+                    ctx.fillStyle = '#333';
+                    ctx.font = 'bold 14px Arial';
                     ctx.textAlign = 'center';
-                    ctx.fillText('kittypics.lol', displayWidth / 2, displayHeight + 32);
+                    ctx.fillText('kittypics.lol', displayWidth / 2, scaledHeight + 26);
                     loading.style.display = 'none';
                 };
                 img.onerror = () => {
