@@ -42,12 +42,13 @@
         select {
             background: #fff;
         }
-        img {
+        canvas {
             width: 100%;
             height: auto;
             border-radius: 10px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.1);
             margin: 20px 0;
+            max-width: 100%;
         }
         button {
             background: #ff6b6b;
@@ -113,16 +114,22 @@
                 const imageUrl = data[0].url;
                 const img = new Image();
                 img.onload = () => {
-                    canvas.width = img.naturalWidth;
-                    canvas.height = img.naturalHeight + 50;
+                    const canvas = document.getElementById('catCanvas');
+                    const maxWidth = 600;
+                    const ratio = Math.min(maxWidth / img.naturalWidth, 1);
+                    const scaledWidth = img.naturalWidth * ratio;
+                    const scaledHeight = img.naturalHeight * ratio;
+                    
+                    canvas.width = scaledWidth;
+                    canvas.height = scaledHeight + 50;
                     const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0);
+                    ctx.drawImage(img, 0, 0, scaledWidth, scaledHeight);
                     ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-                    ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
+                    ctx.fillRect(0, scaledHeight, scaledWidth, 50);
                     ctx.fillStyle = 'black';
-                    ctx.font = 'bold 20px Arial';
+                    ctx.font = 'bold 16px Arial';
                     ctx.textAlign = 'center';
-                    ctx.fillText('kittypics.lol', canvas.width / 2, canvas.height - 20);
+                    ctx.fillText('kittypics.lol', scaledWidth / 2, scaledHeight + 30);
                     loading.style.display = 'none';
                 };
                 img.src = imageUrl;
