@@ -187,6 +187,11 @@
                     option.textContent = breed.name;
                     select.appendChild(option);
                 });
+                // Restore saved breed selection
+                const savedBreed = localStorage.getItem('selectedBreed');
+                if (savedBreed) {
+                    select.value = savedBreed;
+                }
             } catch (error) {
                 console.error('Error loading breeds:', error);
             }
@@ -196,6 +201,8 @@
             const img = document.getElementById('catImage');
             const loading = document.getElementById('loading');
             const selectedBreed = document.getElementById('breedSelect').value;
+            // Save breed selection
+            localStorage.setItem('selectedBreed', selectedBreed);
             loading.style.display = 'block';
             loading.textContent = 'Loading a cute cat...';
             try {
