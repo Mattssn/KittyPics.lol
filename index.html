@@ -180,7 +180,7 @@
                 if (!response.ok) throw new Error(`API error: ${response.status}`);
                 const data = await response.json();
                 if (!data || !data[0]) throw new Error('No cat data received');
-                const imageUrl = data[0].url;
+                const imageUrl = 'https://corsproxy.io/?' + encodeURIComponent(data[0].url);
                 const img = new Image();
                 img.onload = () => {
                     const ctx = canvas.getContext('2d');
