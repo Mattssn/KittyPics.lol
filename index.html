@@ -68,6 +68,10 @@
             box-shadow: 0 8px 32px rgba(0,0,0,0.3);
             width: 100%;
             max-width: 700px;
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         select {
             width: 100%;
@@ -79,14 +83,31 @@
             background: #fff;
             color: #333;
         }
+        .image-wrapper {
+            position: relative;
+            width: 100%;
+            display: inline-block;
+            margin: 25px 0;
+        }
         img {
             width: 100%;
             height: auto;
             border-radius: 10px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-            margin: 25px 0;
             display: block;
             max-width: 100%;
+        }
+        .watermark {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            font-weight: bold;
+            z-index: 10;
         }
         .loading {
             display: none;
@@ -117,6 +138,7 @@
             .container {
                 padding: 25px;
                 max-width: 100%;
+                min-height: 550px;
             }
             button {
                 padding: 14px 35px;
@@ -134,7 +156,10 @@
         <select id="breedSelect">
             <option value="">All Breeds</option>
         </select>
-        <img id="catImage" src="" alt="Random cat" style="display:none;">
+        <div class="image-wrapper">
+            <img id="catImage" src="" alt="Random cat" style="display:none;">
+            <div class="watermark">kittypics.lol</div>
+        </div>
         <p id="loading" class="loading">Loading a cute cat...</p>
         <button onclick="getRandomCat()">Get New Cat</button>
     </div>
