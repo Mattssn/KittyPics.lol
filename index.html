@@ -168,9 +168,12 @@
 </head>
 <body>
     <div class="container">
-        <select id="breedSelect">
-            <option value="">All Breeds</option>
-        </select>
+        <div style="display: flex; align-items: center; margin-bottom: 25px;">
+            <select id="breedSelect">
+                <option value="">All Breeds</option>
+            </select>
+            <button onclick="getRandomCat()" style="margin-left: 10px; padding: 8px 12px; font-size: 1.2em; background: transparent; color: var(--text-color); border: 1px solid var(--text-color); border-radius: 8px; cursor: pointer; transition: background 0.3s;">🔄</button>
+        </div>
         <div class="image-wrapper">
             <img id="catImage" src="" alt="Random cat" style="display:none;">
             <div class="watermark">kittypics.lol</div>
@@ -240,9 +243,10 @@
         loadBreeds();
         getRandomCat();
         
-        // Save breed selection on change
+        // Save breed selection on change and load new cat
         document.getElementById('breedSelect').addEventListener('change', function() {
             localStorage.setItem('selectedBreed', this.value);
+            getRandomCat();
         });
         
         function toggleDarkMode() {
