@@ -66,8 +66,8 @@
             border-radius: 20px;
             padding: 35px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-            width: 100%;
-            max-width: 400px;
+            width: 90%;
+            max-width: 500px;
             min-height: 600px;
             display: flex;
             flex-direction: column;
@@ -132,10 +132,11 @@
         button:hover {
             background: #ff5252;
         }
-        /* Desktop: 400px container */
+        /* Desktop: flexible scaling */
         @media (min-width: 768px) {
             .container {
-                width: 400px;
+                width: 90%;
+                max-width: 600px;
             }
         }
         
@@ -146,7 +147,7 @@
             }
             .container {
                 padding: 25px;
-                width: 100%;
+                width: 95%;
                 min-height: 550px;
             }
             button {
