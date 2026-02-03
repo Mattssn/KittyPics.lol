@@ -112,7 +112,6 @@
                 const data = await response.json();
                 const imageUrl = data[0].url;
                 const img = new Image();
-                img.crossOrigin = 'anonymous';
                 img.onload = () => {
                     canvas.width = img.naturalWidth;
                     canvas.height = img.naturalHeight + 50;
