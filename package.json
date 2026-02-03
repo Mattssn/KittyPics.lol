@@ -1,7 +1,0 @@
-{
-  "name": "kittypics-worker",
-  "version": "1.0.0",
-  "description": "Cloudflare Worker for KittyPics watermarking",
-  "type": "module",
-  "main": "src/index.js"
-}
